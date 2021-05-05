@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Citybee</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container-lg">
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link disabled" href="viewModels.html">View Models</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="addModel.html">Add Model</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="viewVehicles.html">View Vehicles</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="addVehicle.html">Add Vehicle</a>
+        </li>
+      </ul>
+
+      <h1>View Models</h1>
+
+      <h2>Models</h2>
+      <table id="models" class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Model</th>
+            <th>Hour Price</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <h2>Models Quantity</h2>
+      <table id="modelscount" class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Model</th>
+            <th>Hour Price</th>
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </body>
+  <script>
+    fetch("https://citybee-backend-2tf4r.ondigitalocean.app/models")
+      .then((res) => res.json())
+      .then((data) => {
+        showTable(data, document.querySelector("#models > tbody"));
+      });
+
+    fetch("https://citybee-backend-2tf4r.ondigitalocean.app/modelscount")
+      .then((res) => res.json())
+      .then((data) => {
+        showTable(data, document.querySelector("#modelscount > tbody"));
+      });
+
+    function showTable(data, tbody) {
+      tbody.innerHTML = "";
+      data.forEach((item) => {
+        const tr = tbody.insertRow();
+        const id = tr.insertCell();
+        const model = tr.insertCell();
+        const price = tr.insertCell();
+
+        id.textContent = item.id;
+        model.textContent = item.name;
+        price.textContent = item.hour_price;
+
+        if (item.quantity) {
+          const amount = tr.insertCell();
+          amount.textContent = item.quantity;
+        }
+      });
+    }
+  </script>
+</html>
